@@ -109,6 +109,12 @@ module.exports = class ExpressOIDC extends EventEmitter {
     // Validate the redirect_uri param
     assertRedirectUri(options.loginRedirectUri);
 
+    // Build redirect uri unless explicitly set
+    options.loginRedirectUri = loginRedirectUri || `${appBaseUrl}${options.routes.loginCallback.path}`;
+
+    // Validate the redirect_uri param
+    assertRedirectUri(options.loginRedirectUri);
+
     const context = {
       options,
       emitter: this

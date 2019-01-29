@@ -25,9 +25,9 @@ describe('new ExpressOIDC()', () => {
 
   it('should throw if no issuer is provided', () => {
     function createInstance() {
-      new ExpressOIDC({
-        ...minimumConfig, 
-        issuer: undefined 
+      new ExpressOIDC({ 
+        ...minimumConfig,
+        issuer: undefined
       });
     }
     const errorMsg = `Your Okta URL is missing. ${findDomainMessage}`;
@@ -37,8 +37,8 @@ describe('new ExpressOIDC()', () => {
   it('should throw if an issuer that does not contain https is provided', () => {
     function createInstance() {
       new ExpressOIDC({
-        ...minimumConfig, 
-        issuer: 'http://foo.com' 
+        ...minimumConfig,
+        issuer: 'http://foo.com'
       });
     }
     const errorMsg = `Your Okta URL must start with https. Current value: http://foo.com. ${findDomainMessage}`;
@@ -46,7 +46,7 @@ describe('new ExpressOIDC()', () => {
   });
 
   it('should not throw if https issuer validation is skipped', () => {
-    const mock = jest.spyOn(console, 'warn').mockImplementation(() => {}); // silence for testing
+    jest.spyOn(console, 'warn').mockImplementation(() => {}); // silence for testing
     function createInstance() {
       new ExpressOIDC({
         ...minimumConfig,
@@ -163,7 +163,7 @@ describe('new ExpressOIDC()', () => {
       });
     }
     const errorMsg = `Your client secret is missing. ${findCredentialsMessage}`;
-  expect(createInstance).toThrow(errorMsg);
+    expect(createInstance).toThrow(errorMsg);
   });
 
   it('should throw if a client_id matching {clientId} is provided', () => {
@@ -181,7 +181,7 @@ describe('new ExpressOIDC()', () => {
     function createInstance() {
       new ExpressOIDC({
         ...minimumConfig,
-        client_secret: '{clientSecret}',
+        client_secret: '{clientSecret}'
       });
     }
     const errorMsg = `Replace {clientSecret} with the client secret of your Application. ${findCredentialsMessage}`;
@@ -232,6 +232,7 @@ describe('new ExpressOIDC()', () => {
     expect(createInstance).toThrow(errorMsg);
   });
 
+
   it('should set the HTTP timeout to 10 seconds', () => {
     new ExpressOIDC({ 
       ...minimumConfig
@@ -253,10 +254,10 @@ describe('new ExpressOIDC()', () => {
 
   it('should throw ETIMEOUT if the timeout is reached', (done) => {
     nock('https://foo')
-    .get('/.well-known/openid-configuration')
-    .reply(200, function cb() {
-      // dont reply, we want to timeout
-    });
+      .get('/.well-known/openid-configuration')
+      .reply(200, function cb() {
+        // dont reply, we want to timeout
+      });
     new ExpressOIDC({
       ...minimumConfig,
       timeout: 1
@@ -272,13 +273,13 @@ describe('new ExpressOIDC()', () => {
     }, function (er, data) {
       const openIdPkg = data.children[0].package;
       nock('https://foo')
-      .get('/.well-known/openid-configuration')
-      .reply(200, function cb() {
-        const userAgent = this.req.headers['user-agent'];
-        const expectedAgent = `${pkg.name}/${pkg.version} ${openIdPkg.name}/${openIdPkg.version} node/${process.versions.node} ${os.platform()}/${os.release()}`;
-        expect(userAgent).toBe(expectedAgent);
-        done();
-      });
+        .get('/.well-known/openid-configuration')
+        .reply(200, function cb() {
+          const userAgent = this.req.headers['user-agent'];
+          const expectedAgent = `${pkg.name}/${pkg.version} ${openIdPkg.name}/${openIdPkg.version} node/${process.versions.node} ${os.platform()}/${os.release()}`;
+          expect(userAgent).toBe(expectedAgent);
+          done();
+        });
       new ExpressOIDC({
         ...minimumConfig
       }).on('error', () => {

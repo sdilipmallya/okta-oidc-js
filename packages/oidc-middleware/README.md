@@ -183,6 +183,8 @@ The router is required in order for `ensureAuthenticated`, and `isAuthenticated`
 * `/logout/callback` - the default callback url that Okta will redirect back to after the session at Okta is ended
 The paths for these generated routes can be customized using the `routes` config, see [Customizing Routes](#customizing-routes) for details.
 
+The paths for these generated routes can be customized using the `routes` config, see [Customizing Routes](#customizing-routes) for details.
+
 #### oidc.on('ready', callback)
 
 The middleware must retrieve some information about your client before starting the server. You **must** wait until ExpressOIDC is ready to start your server.
